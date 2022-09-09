@@ -4,7 +4,7 @@ const { Pool } = require("pg")
 const pool = new Pool({
   user: "postgres",
   host: "localhost",
-  database: "postgres",
+  database: "production",
   //this should go in the env variables
   password: "monday%77ER",
   port: 5432,

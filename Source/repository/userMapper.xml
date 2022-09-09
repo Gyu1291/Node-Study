@@ -1,0 +1,37 @@
+
+<!-- 
+to escape brackets like <>, [], use CDATA       
+<![CDATA[ price < 500 ]]>
+-->
+
+<!-- MAPPER userRepository.js -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userMapper">  
+
+    <!-- add a single user -->
+    <insert id="createUser">
+        INSERT INTO users VALUES
+        (#{userId}, #{username})   
+    </insert>
+
+    <!-- select a single user with id -->
+    <select id="selectUser">
+        SELECT * FROM users
+        WHERE
+            uid = #{userId}
+    </select>
+
+    <!-- delete a single user with id -->
+    <delete id="deleteUser">
+        DELETE FROM users
+        WHERE
+            uid = #{uesrId}
+    </delete>
+
+    <!-- flush database -->
+    <delete id="flushTable">
+        DELETE FROM users
+    </delete>
+</mapper>
+
