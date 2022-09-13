@@ -14,7 +14,6 @@ test("moneyRepository-update-RP", async () => {
     await moneyRepository.setRPBalance(userId, 100)
     await moneyRepository.updateRPBalance(userId, 100)
     result = await moneyRepository.queryBalance(userId)
-    result = { userId: null, DIA_amount: null, RP_amount: null }
   } catch (e) {
     console.log(e)
   } finally {

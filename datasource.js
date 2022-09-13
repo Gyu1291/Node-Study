@@ -7,7 +7,7 @@ const pool = new Pool({
   host: "localhost",
   database: "production",
   //this should go in the env variables
-  password: "monday%77ER",
+  password: "1234",
   port: 5432,
 })
 
