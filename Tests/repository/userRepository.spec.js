@@ -1,6 +1,5 @@
 // @ts-check
 const { userRepository } = require("../../Source/repository/userRepository.js")
-const { pool } = require("../../datasource.js")
 
 test("userRepository-save-user", async () => {
   let userId = "123"
@@ -17,6 +16,5 @@ test("userRepository-save-user", async () => {
   }
 })
 
-afterEach(async () => {
-  await userRepository.flushTable()
-})
+// @AfterEach
+afterEach(async () => await userRepository.flushTable())

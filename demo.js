@@ -1,18 +1,9 @@
-async function Workers() {
-  var workerCount = 0
-  function startNew() {
-    return new Promise((res) => {
-      setTimeout(() => res(++workerCount), 1000)
-    })
-  }
-  return startNew()
-}
-
 async function doAsync() {
-  console.log(await Workers())
-  console.log(await Workers())
-  console.log(await Workers())
-  console.log(await Workers())
+  await new Promise((res) => setTimeout(() => res(42), 2000))
+  console.log("after await in doAsync")
 }
 
-doAsync()
+;(async () => {
+  await doAsync()
+  console.log("after call doAsync")
+})()
