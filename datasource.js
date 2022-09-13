@@ -38,7 +38,6 @@ async function transaction() {
     },
     rollback: async function () {
       try {
-        console.log("rolling back")
         await conn.query("ROLLBACK")
       } catch (e) {
         throw e

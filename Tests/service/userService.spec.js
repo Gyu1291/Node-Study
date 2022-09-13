@@ -15,4 +15,4 @@ test("userService-transaction-success", async () => {
 })
 
 // @AfterEach
-//afterEach(async () => await userRepository.flushTable())
+afterEach(async () => await userRepository.flushTable())

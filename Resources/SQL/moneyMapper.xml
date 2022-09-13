@@ -1,0 +1,65 @@
+
+<!-- 
+to escape brackets like <>, [], use CDATA       
+<![CDATA[ price < 500 ]]>
+-->
+
+<!-- MAPPER userRepository.js -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="moneyMapper">  
+
+    <!-- add a single user -->
+    <!-- columns are initialized to default values on DB-->
+    <insert id="createEntry">
+        INSERT INTO resources_balance VALUES
+        (#{userId})
+    </insert>
+
+    <!-- select a single user with id -->
+    <select id="queryBalance">
+        SELECT * FROM resources_balance
+        WHERE
+            uid = #{userId}
+    </select>
+
+    <!-- modify the RP balance by difference from current amount -->
+    <update id="updateRPBalance">
+        UPDATE resources_balance
+        SET "RP_amount" = res."RP_amount" + #{RP_amount}
+        FROM (SELECT * FROM resources_balance WHERE uid = #{userId}) AS res
+        WHERE
+            resources_balance.uid = res.uid
+    </update>
+
+    <!-- modify the RP balance -->
+    <update id="setRPBalance">
+        UPDATE resources_balance 
+        SET "RP_amount" = #{RP_amount}
+        WHERE
+            uid = #{userId}
+    </update>
+
+    <!-- modify the DIA balance by difference from current amount-->
+    <update id="updateDIABalance">
+        UPDATE resources_balance
+        SET "DIA_amount" = res."DIA_amount" + #{DIA_amount}
+        FROM (SELECT * FROM resources_balance WHERE uid = #{userId}) AS res
+        WHERE
+            resources_balance.uid = res.uid
+    </update>
+
+    <!-- modify the RP balance -->
+    <update id="setDIABalance">
+        UPDATE resources_balance 
+        SET "DIA_amount" = #{DIA_amount}
+        WHERE
+            uid = #{userId}
+    </update>
+
+    <!-- flush database -->
+    <delete id="flushTable">
+        DELETE FROM resources_balance
+    </delete>
+</mapper>
+

@@ -13,24 +13,26 @@ var userRepository = {
     var conn = null
     if (transaction === null) {
       conn = await datasource.getConnection()
+      await conn.query(query)
+      conn.release()
     } else {
       conn = await transaction.getConnection()
-      console.log(
-        "create with transaction, conn = " + Object.getOwnPropertyNames(conn)
-      )
+      await conn.query(query)
     }
-    await conn.query(query)
   },
   // select a single user, connection provided from outside
   selectUser: async function (userId, transaction = null) {
     var query = mapper.makeQuery("selectUser", { userId: userId })
     var conn = null
+    var rs
     if (transaction === null) {
       conn = await datasource.getConnection()
+      rs = await conn.query(query)
+      conn.release()
     } else {
       conn = await transaction.getConnection()
+      rs = await conn.query(query)
     }
-    const rs = await conn.query(query)
     const rs0 = rs.rows[0]
     return { userId: rs0.uid, username: rs0.username }
   },
@@ -40,16 +42,19 @@ var userRepository = {
     var conn = null
     if (transaction === null) {
       conn = await datasource.getConnection()
+      await conn.query(query)
+      conn.release()
     } else {
       conn = await transaction.getConnection()
+      await conn.query(query)
     }
-    await conn.query(query)
   },
   // flush the DB
   flushTable: async function () {
     var query = mapper.makeQuery("flushTable")
     var conn = await datasource.getConnection()
     await conn.query(query)
+    conn.release()
   },
 }
 
