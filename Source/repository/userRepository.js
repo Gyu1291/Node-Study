@@ -3,6 +3,33 @@ const sqlMapper = require("./mapper.js")
 
 var mapper = sqlMapper.getMapper("userMapper")
 
+//repo transaction function
+async function executeQuery(transaction, query, rs)
+{
+  var conn = null;
+  if(transaction===null)
+  {
+    conn = await datasource.getConnection()
+    await conn.query(query)
+    if(rs)
+    {
+      rs = await conn.query(query);
+    }
+    conn.release()
+
+  }
+  else
+  {
+    conn = await transaction.getConnection()
+    if(rs)
+    {
+      rs = await conn.query(query);
+    }
+    await conn.query(query)
+  }
+}
+
+
 var userRepository = {
   // create a user
   createUser: async function (userId, username, transaction = null) {
@@ -10,29 +37,14 @@ var userRepository = {
       userId: userId,
       username: username,
     })
-    var conn = null
-    if (transaction === null) {
-      conn = await datasource.getConnection()
-      await conn.query(query)
-      conn.release()
-    } else {
-      conn = await transaction.getConnection()
-      await conn.query(query)
-    }
+    executeQuery(transaction, query);
   },
   // select a single user, connection provided from outside
   selectUser: async function (userId, transaction = null) {
     var query = mapper.makeQuery("selectUser", { userId: userId })
     var conn = null
-    var rs
-    if (transaction === null) {
-      conn = await datasource.getConnection()
-      rs = await conn.query(query)
-      conn.release()
-    } else {
-      conn = await transaction.getConnection()
-      rs = await conn.query(query)
-    }
+    var rs;
+    executeQuery(transaction, query,rs);
     const rs0 = rs.rows[0]
     return { userId: rs0.uid, username: rs0.username }
   },
@@ -40,14 +52,7 @@ var userRepository = {
   deleteUser: async function (userId, transaction = null) {
     var query = mapper.makeQuery("deleteUser", { userId: userId })
     var conn = null
-    if (transaction === null) {
-      conn = await datasource.getConnection()
-      await conn.query(query)
-      conn.release()
-    } else {
-      conn = await transaction.getConnection()
-      await conn.query(query)
-    }
+    executeQuery(transaction, query);
   },
   // flush the DB
   flushTable: async function () {

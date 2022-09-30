@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="songMapper">  
+
+
+    <!-- select a song with id -->
+    <select id="selectSong">
+        SELECT * FROM songs
+        WHERE
+            songId = #{songId}
+    </select>
+
+    <!-- delete an artist with id -->
+    <select id="selectArtist">
+        SELECT * FROM songs
+        WHERE
+            artistId = #{artistId}
+    </select>
+
+    <select id="selectHighScore">
+        SELECT
+            DISTINCT ON(artistId) artistId,
+            userId, songName, score, stars
+        FROM
+            playrecords
+        WHERE
+            userId = #{userId}
+        ORDER BY score
+    </select>
+
+    <!-- add new playrecord in table -->
+    <insert id="insertPlayRecord">
+        INSERT into playrecords VALUES
+        (#{userId}, #{songId}, #{score}, #{stars}, #{timeStamp})
+    </insert>
+
+    
+</mapper>
