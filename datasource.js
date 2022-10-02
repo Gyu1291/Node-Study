@@ -7,7 +7,7 @@ const pool = new Pool({
   host: "localhost",
   database: "production",
   //this should go in the env variables
-  password: "1234",
+  password: "monday%77ER",
   port: 5432,
 })
 
@@ -60,5 +60,26 @@ async function transaction() {
   }
 }
 
+async function executeQuery(transaction, query) {
+  var conn = null
+  var rs = null
+  if (transaction === null) {
+    conn = await getConnection()
+    try {
+      rs = await conn.query(query)
+    } catch (e) {
+      throw e
+    } finally {
+      conn.release()
+    }
+  } else {
+    conn = await transaction.getConnection()
+    rs = await conn.query(query)
+    await conn.query(query)
+  }
+  return rs
+}
+
 exports.getConnection = getConnection
 exports.getTransaction = transaction
+exports.executeQuery = executeQuery
