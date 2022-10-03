@@ -49,12 +49,27 @@ const run = async()=>{
             else
             {
                 var data = await redis.zRange(objectMessage.user, 0, -1); //가장 작은 값은 data 0 이다.
-                if(data[0]<objectMessage.score)
+                if(data[0].score < objectMessage.score)
                 {
                     await redis.zRem(data[0]); //delete value
-                    await redis.ZADD(objectMessage.user, objectMessage.score, objectMessage.songName);
+                    await redis.ZADD(objectMessage.user, {score: objectMessage.score, value: objectMessage.songName});
                     console.log("success!")
                     //전체 랭크 비교하는 로직
+
+                    var totalRank = await redis.zRange("totalRank", 0, -1);
+                    var data = await redis.zRange(objectMessage.user, 0, -1);
+                    var userTotalScore = 0;
+                    foreach(eachData in data)
+                    {
+                        userTotalScore += eachData.score;
+                    }
+
+                    if(totalRank[0].score < userTotalScore)
+                    {
+                        await redis.zRem(totalRank[0]); //delete value
+                        await redis.ZADD("totalRank", {score: userTotalScore, value: objectMessage.user});
+                    }
+                    
                 }
                 else
                 {
