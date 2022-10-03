@@ -38,15 +38,13 @@ const run = async()=>{
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
             console.log("Message: "+ message.value);
-            /*
-            
-            
-            const objectMessage = JSON.parse(message);
-            var count = await redis.ZCOUNT(objectMessage.user);
+            const objectMessage = JSON.parse(message.value.toString());
+
+            var count = await redis.ZCOUNT(objectMessage.user, -Infinity, Infinity);
             if(count<5)
             {
-                redis.ZADD(objectMessage.user, objectMessage.score, objectMessage.songName); //key, score, value
-                console.log("success!")
+                await redis.ZADD(objectMessage.user, {score: objectMessage.score, value: objectMessage.songName}); //key, score, value
+                console.log("successfully added!");
             }
             else
             {
@@ -61,17 +59,10 @@ const run = async()=>{
                 else
                 {
                     //song repository접근 후 데이터 저장하는 로직
+                    console.log("Stored In Postgre database");
                 }
             }
-            
 
-
-            
-            
-            
-            
-            
-            */
         }
     });
 }

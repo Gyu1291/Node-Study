@@ -8,13 +8,7 @@ const PORT = 3000
 
 const kafkaProducer = require("./Source/kafka/producer.js");
 kafkaProducer.messageProducer.run();
-const sendData = [{
-  user: 'soongyu',
-  score: 113,
-  songName: 'Honey',
-}];
-const stringData = sendData.toString();
-kafkaProducer.messageProducer.sendMessages("play-record", "[{user: 'soongyu', score: 113, songName: 'Honey'}]");
+kafkaProducer.messageProducer.sendMessages("play-record", '{"user": "soongyu", "score": 113, "songName": "Honey"}');
 
 app.use(bodyParser.json())
 
