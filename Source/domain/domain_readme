@@ -1,0 +1,11 @@
+This text file describes how the domain folder should be used.
+Domain holds definitions for classes/objects
+that represent data and object instances that the app uses.
+
+for example, the ##card## class represents a card object,
+and is used by the cardRepository or any relevant services.
+
+adhering to the Java convention would require the 
+file name to match the class name defined in the file,
+with the class name following the uppercase camel-case convention,
+but rules could bend since we are using javascript.
